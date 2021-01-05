@@ -17,14 +17,14 @@ dynamic dartify(dynamic jsObject) {
       return DocumentReference.getInstance(object);
     }
     if (util.instanceof(object, GeoPointConstructor)) {
-      return object as GeoPoint;
+      return object as GeoPoint?;
     }
     if (util.instanceof(object, TimestampJsConstructor)) {
       return DateTime.fromMillisecondsSinceEpoch(
           (object as TimestampJsImpl).toMillis());
     }
     if (util.instanceof(object, BlobConstructor)) {
-      return object as Blob;
+      return object as Blob?;
     }
     return null;
   });

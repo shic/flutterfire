@@ -14,8 +14,8 @@ import '../utils/test_common.dart';
 
 void main() {
   initializeMethodChannel();
-  /*late*/ MethodChannelFirebaseFirestore firestore;
-  /*late*/ FirebaseApp secondaryApp;
+  late MethodChannelFirebaseFirestore firestore;
+  late FirebaseApp secondaryApp;
   bool mockPlatformExceptionThrown = false;
   bool mockExceptionThrown = false;
   int mockTransactionHandleId = 0;
@@ -247,7 +247,7 @@ void main() {
     });
 
     group('snapshotsInSync()', () {
-      int handle;
+      int? handle;
       setUp(() {
         handle = nextMockHandleId;
       });
@@ -261,7 +261,7 @@ void main() {
           () async {
         final Stream<void> stream = firestore.snapshotsInSync();
         final StreamSubscription<QuerySnapshotPlatform> subscription =
-            await stream.listen((event) {});
+            await (stream.listen((event) {}) as FutureOr<StreamSubscription<QuerySnapshotPlatform>>);
 
         await subscription.cancel();
         await Future<void>.delayed(Duration.zero);
@@ -287,7 +287,7 @@ void main() {
 
     group('runTransaction()', () {
       TransactionHandler transactionHandler = (_) async => {};
-      int handleId;
+      int? handleId;
       setUp(() {
         handleId = mockTransactionHandleId;
       });

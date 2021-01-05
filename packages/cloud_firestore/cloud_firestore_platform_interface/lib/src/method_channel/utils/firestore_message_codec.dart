@@ -79,17 +79,11 @@ class FirestoreMessageCodec extends StandardMessageCodec {
       buffer.putUint8List(value.bytes);
     } else if (value is FieldValuePlatform) {
       MethodChannelFieldValue delegate = FieldValuePlatform.getDelegate(value);
-      final int code = _kFieldValueCodes[delegate.type];
-      /*melos-nullsafety-remove-start*/
-      assert(code != null);
-      /*melos-nullsafety-remove-end*/
+      final int code = _kFieldValueCodes[delegate.type]!;
       buffer.putUint8(code);
       if (delegate.value != null) writeValue(buffer, delegate.value);
     } else if (value is FieldPathType) {
-      final int code = _kFieldPathCodes[value];
-      /*melos-nullsafety-remove-start*/
-      assert(code != null);
-      /*melos-nullsafety-remove-end*/
+      final int code = _kFieldPathCodes[value]!;
       buffer.putUint8(code);
     } else if (value is FieldPath) {
       buffer.putUint8(_kFieldPath);
@@ -134,7 +128,7 @@ class FirestoreMessageCodec extends StandardMessageCodec {
         return GeoPoint(buffer.getFloat64(), buffer.getFloat64());
       case _kDocumentReference:
         final String appName = readValue(buffer);
-        final String /*!*/ path = readValue(buffer);
+        final String path = readValue(buffer);
         final FirebaseApp app = Firebase.app(appName);
         final FirebaseFirestorePlatform firestore =
             FirebaseFirestorePlatform.instanceFor(app: app);
@@ -142,7 +136,7 @@ class FirestoreMessageCodec extends StandardMessageCodec {
       case _kBlob:
         final int length = readSize(buffer);
         final List<int> bytes = buffer.getUint8List(length);
-        return Blob(bytes);
+        return Blob(bytes as Uint8List);
       case _kDocumentId:
         return FieldPath.documentId;
       case _kNaN:

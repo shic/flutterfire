@@ -30,15 +30,15 @@ class FirebaseFirestoreWeb extends FirebaseFirestorePlatform {
 
   /// Builds an instance of [FirebaseFirestoreWeb] with an optional [FirebaseApp] instance
   /// If [app] is null then the created instance will use the default [FirebaseApp]
-  FirebaseFirestoreWeb({FirebaseApp /*?*/ app})
+  FirebaseFirestoreWeb({FirebaseApp? app})
       : _webFirestore =
             firestore_interop.getFirestoreInstance(core_interop.app(app?.name)),
-        super(appInstance: app) {
+        super(appInstance: app!) {
     FieldValueFactoryPlatform.instance = FieldValueFactoryWeb();
   }
 
   @override
-  FirebaseFirestorePlatform delegateFor({/*required*/ FirebaseApp app}) {
+  FirebaseFirestorePlatform delegateFor({/*required*/ required FirebaseApp app}) {
     return FirebaseFirestoreWeb(app: app);
   }
 
@@ -100,7 +100,7 @@ class FirebaseFirestoreWeb extends FirebaseFirestorePlatform {
   @override
   Future<T> runTransaction<T>(TransactionHandler<T> transactionHandler,
       {Duration timeout = const Duration(seconds: 30)}) async {
-    /*late*/ T result;
+    late T result;
     try {
       await _webFirestore.runTransaction((transaction) async {
         result = await transactionHandler(
@@ -122,7 +122,7 @@ class FirebaseFirestoreWeb extends FirebaseFirestorePlatform {
       // https://github.com/firebase/firebase-js-sdk/blob/e67affba53a53d28492587b2f60521a00166db60/packages/firestore/src/local/lru_garbage_collector.ts#L175
       cacheSizeBytes = -1;
     } else {
-      cacheSizeBytes = settings.cacheSizeBytes /*!*/;
+      cacheSizeBytes = settings.cacheSizeBytes!;
     }
 
     if (settings.host != null && settings.sslEnabled != null) {
@@ -138,7 +138,7 @@ class FirebaseFirestoreWeb extends FirebaseFirestorePlatform {
 
   /// Enable persistence of Firestore data.
   @override
-  Future<void> enablePersistence([PersistenceSettings /*?*/ settings]) async {
+  Future<void> enablePersistence([PersistenceSettings? settings]) async {
     try {
       await _webFirestore.enablePersistence(
           firestore_interop.PersistenceSettings(

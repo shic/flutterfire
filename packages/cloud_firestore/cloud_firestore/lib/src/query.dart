@@ -37,7 +37,7 @@ class Query {
   }
 
   /// Returns whether the current operator is an inequality operator.
-  bool _isInequality(String operator) {
+  bool _isInequality(String? operator) {
     return (operator == '<' ||
         operator == '<=' ||
         operator == '>' ||
@@ -53,9 +53,6 @@ class Query {
   /// passed to the query.
   Map<String, dynamic> _assertQueryCursorSnapshot(
       DocumentSnapshot documentSnapshot) {
-    /*melos-nullsafety-remove-start*/
-    assert(documentSnapshot != null);
-    /*melos-nullsafety-remove-end*/
     assert(documentSnapshot.exists,
         "a document snapshot must exist to be used within a query");
 
@@ -102,9 +99,6 @@ class Query {
 
   /// Common handler for all non-document based cursor queries.
   List<dynamic> _assertQueryCursorValues(List<dynamic> fields) {
-    /*melos-nullsafety-remove-start*/
-    assert(fields != null);
-    /*melos-nullsafety-remove-end*/
     List<List<dynamic>> orders = List.from(parameters['orderBy']);
 
     assert(fields.length <= orders.length,
@@ -178,17 +172,11 @@ class Query {
   ///
   /// To modify how the query is fetched, the [options] parameter can be provided
   /// with a [GetOptions] instance.
-  Future<QuerySnapshot> get([GetOptions /*?*/ options]) async {
+  Future<QuerySnapshot> get([GetOptions? options]) async {
     QuerySnapshotPlatform snapshotDelegate =
         await _delegate.get(options ?? const GetOptions());
     return QuerySnapshot._(firestore, snapshotDelegate);
   }
-
-  /*melos-nullsafety-remove-start*/
-  @Deprecated("Deprecated in favor of `.get()`")
-  // ignore: public_member_api_docs
-  Future<QuerySnapshot> getDocuments([GetOptions options]) => get(options);
-  /*melos-nullsafety-remove-end*/
 
   /// Creates and returns a new Query that's additionally limited to only return up
   /// to the specified number of documents.
@@ -229,12 +217,7 @@ class Query {
   /// or [endAtDocument] because the order by clause on the document id
   /// is added by these methods implicitly.
   Query orderBy(dynamic field, {bool descending = false}) {
-    assert(field != null
-            /*melos-nullsafety-remove-start*/
-            &&
-            descending != null
-        /*melos-nullsafety-remove-end*/
-        );
+    assert(field != null);
     _assertValidFieldType(field);
     assert(!_hasStartCursor(),
         "Invalid query. You must not call startAt(), startAtDocument(), startAfter() or startAfterDocument() before calling orderBy()");
@@ -261,7 +244,7 @@ class Query {
     if (conditions.isNotEmpty) {
       for (dynamic condition in conditions) {
         dynamic field = condition[0];
-        String operator = condition[1];
+        String? operator = condition[1];
 
         // Initial orderBy() parameter has to match every where() fieldPath parameter when
         // inequality operator is invoked
@@ -357,10 +340,10 @@ class Query {
     dynamic isGreaterThan,
     dynamic isGreaterThanOrEqualTo,
     dynamic arrayContains,
-    List<dynamic> /*?*/ arrayContainsAny,
-    List<dynamic> /*?*/ whereIn,
-    List<dynamic> /*?*/ whereNotIn,
-    bool /*?*/ isNull,
+    List<dynamic>? arrayContainsAny,
+    List<dynamic>? whereIn,
+    List<dynamic>? whereNotIn,
+    bool? isNull,
   }) {
     _assertValidFieldType(field);
 
@@ -426,7 +409,7 @@ class Query {
     // query is valid.
     for (dynamic condition in conditions) {
       dynamic field = condition[0]; // FieldPath or FieldPathType
-      String operator = condition[1];
+      String? operator = condition[1];
       dynamic value = condition[2];
 
       // Initial orderBy() parameter has to match every where() fieldPath parameter when

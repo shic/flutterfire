@@ -15,7 +15,7 @@ import '../../utils/test_common.dart';
 
 void main() {
   initializeMethodChannel();
-  /*late*/ MethodChannelFirebaseFirestore firestore;
+  late MethodChannelFirebaseFirestore firestore;
 
   setUpAll(() async {
     firestore = MethodChannelFirebaseFirestore(app: Firebase.app());
@@ -101,23 +101,23 @@ void main() {
 }
 
 void _checkEncodeDecode<T>(
-  MessageCodec<T> codec,
-  T /*?*/ message, {
-  MessageCodec<T> /*?*/ decodingCodec,
+  MessageCodec<T?> codec,
+  T? message, {
+  MessageCodec<T>? decodingCodec,
 }) {
-  MessageCodec<T> decoder = decodingCodec ?? codec;
+  MessageCodec<T?> decoder = decodingCodec ?? codec;
 
-  final ByteData /*?*/ encoded = codec.encodeMessage(message);
-  final T /*?*/ decoded = decoder.decodeMessage(encoded);
+  final ByteData? encoded = codec.encodeMessage(message);
+  final T? decoded = decoder.decodeMessage(encoded);
   if (message == null) {
     expect(encoded, isNull);
     expect(decoded, isNull);
   } else {
     expect(_deepEquals(message, decoded), isTrue);
-    final ByteData encodedAgain = codec.encodeMessage(decoded) /*!*/;
+    final ByteData encodedAgain = codec.encodeMessage(decoded)!;
     expect(
       encodedAgain.buffer.asUint8List(),
-      orderedEquals(encoded /*!*/ .buffer.asUint8List()),
+      orderedEquals(encoded! .buffer.asUint8List()),
     );
   }
 }

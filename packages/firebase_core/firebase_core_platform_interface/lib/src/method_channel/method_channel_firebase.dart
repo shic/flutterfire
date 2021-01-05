@@ -27,9 +27,9 @@ class MethodChannelFirebase extends FirebasePlatform {
   /// any Firebase apps created natively and any constants which are required
   /// for a plugin to function correctly before usage.
   Future<void> _initializeCore() async {
-    List<Map> apps = await channel.invokeListMethod<Map>(
+    List<Map> apps = await (channel.invokeListMethod<Map>(
       'Firebase#initializeCore',
-    );
+    ) as FutureOr<List<Map<dynamic, dynamic>>>);
 
     apps.forEach(_initializeFirebaseAppFromMap);
     isCoreInitialized = true;
@@ -63,8 +63,8 @@ class MethodChannelFirebase extends FirebasePlatform {
   ///
   /// Internally initializes core if it is not yet ready.
   @override
-  Future<FirebaseAppPlatform /*!*/ > initializeApp(
-      {String /*?*/ name, FirebaseOptions /*?*/ options}) async {
+  Future<FirebaseAppPlatform > initializeApp(
+      {String? name, FirebaseOptions? options}) async {
     if (name == defaultFirebaseAppName) {
       throw noDefaultAppInitialization();
     }
@@ -79,14 +79,14 @@ class MethodChannelFirebase extends FirebasePlatform {
     // If no instance is available, the user has not set up Firebase correctly for
     // their platform.
     if (name == null) {
-      MethodChannelFirebaseApp defaultApp =
+      MethodChannelFirebaseApp? defaultApp =
           appInstances[defaultFirebaseAppName];
 
       if (defaultApp == null) {
         throw coreNotInitialized();
       }
 
-      return appInstances[defaultFirebaseAppName];
+      return appInstances[defaultFirebaseAppName]!;
     }
 
     assert(options != null,
@@ -97,12 +97,12 @@ class MethodChannelFirebase extends FirebasePlatform {
       throw duplicateApp(name);
     }
 
-    _initializeFirebaseAppFromMap(await channel.invokeMapMethod(
+    _initializeFirebaseAppFromMap(await (channel.invokeMapMethod(
       'Firebase#initializeApp',
-      <String, dynamic>{'appName': name, 'options': options /*!*/ .asMap},
-    ));
+      <String, dynamic>{'appName': name, 'options': options! .asMap},
+    ) as FutureOr<Map<dynamic, dynamic>>));
 
-    return appInstances[name];
+    return appInstances[name]!;
   }
 
   /// Returns a [FirebaseAppPlatform] by [name].
@@ -110,9 +110,9 @@ class MethodChannelFirebase extends FirebasePlatform {
   /// Returns the default Firebase app if no [name] is provided and throws a
   /// [FirebaseException] if no app with the [name] has been created.
   @override
-  FirebaseAppPlatform /*!*/ app([String name = defaultFirebaseAppName]) {
+  FirebaseAppPlatform app([String name = defaultFirebaseAppName]) {
     if (appInstances.containsKey(name)) {
-      return appInstances[name];
+      return appInstances[name]!;
     }
 
     throw noAppExists(name);

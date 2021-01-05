@@ -21,15 +21,15 @@ List<App> get apps => firebase_interop.apps
     .toList();
 
 App initializeApp(
-    {String apiKey,
-    String authDomain,
-    String databaseURL,
-    String projectId,
-    String storageBucket,
-    String messagingSenderId,
-    String name,
-    String measurementId,
-    String appId}) {
+    {String? apiKey,
+    String? authDomain,
+    String? databaseURL,
+    String? projectId,
+    String? storageBucket,
+    String? messagingSenderId,
+    String? name,
+    String? measurementId,
+    String? appId}) {
   name ??= defaultFirebaseAppName;
 
   try {
@@ -50,7 +50,7 @@ App initializeApp(
   }
 }
 
-App app([String name]) {
+App app([String? name]) {
   return App.getInstance(
       name != null ? firebase_interop.app(name) : firebase_interop.app());
 }

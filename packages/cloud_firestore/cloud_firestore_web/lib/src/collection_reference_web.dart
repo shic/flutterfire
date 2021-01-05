@@ -18,11 +18,11 @@ class CollectionReferenceWeb extends QueryWeb
   final FirebaseFirestorePlatform _firestorePlatform;
 
   /// instance of DocumentReference from the web plugin
-  final firestore_interop.CollectionReference _delegate;
+  final firestore_interop.CollectionReference? _delegate;
 
   // disabling lint as it's only visible for testing
   @visibleForTesting
-  QueryWeb queryDelegate; // ignore: public_member_api_docs
+  QueryWeb? queryDelegate; // ignore: public_member_api_docs
 
   /// Creates an instance of [CollectionReferenceWeb] which represents path
   /// at [pathComponents] and uses implementation of [webFirestore]
@@ -33,7 +33,7 @@ class CollectionReferenceWeb extends QueryWeb
             parameters: {});
 
   @override
-  String get path => _delegate.path;
+  String get path => _delegate!.path;
 
   @override
   bool operator ==(dynamic o) =>
@@ -42,18 +42,18 @@ class CollectionReferenceWeb extends QueryWeb
       o.path == path;
 
   @override
-  DocumentReferencePlatform doc([String /*?*/ path]) {
-    firestore_interop.DocumentReference documentReference = _delegate.doc(path);
+  DocumentReferencePlatform doc([String? path]) {
+    firestore_interop.DocumentReference documentReference = _delegate!.doc(path)!;
     return DocumentReferenceWeb(
         _firestorePlatform, _webFirestore, documentReference.path);
   }
 
   @override
-  String get id => _delegate.id;
+  String get id => _delegate!.id;
 
   @override
-  DocumentReferencePlatform /*?*/ get parent {
-    firestore_interop.DocumentReference documentReference = _delegate.parent;
+  DocumentReferencePlatform? get parent {
+    firestore_interop.DocumentReference? documentReference = _delegate!.parent;
 
     if (documentReference == null) {
       return null;

@@ -1,4 +1,4 @@
-// @dart = 2.9
+
 
 // Copyright 2020, the Chromium project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
@@ -13,7 +13,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 void runTransactionTests() {
   group('$Transaction', () {
-    /*late*/ FirebaseFirestore firestore;
+    late FirebaseFirestore firestore;
 
     setUpAll(() async {
       firestore = FirebaseFirestore.instance;
@@ -47,9 +47,6 @@ void runTransactionTests() {
           });
           throw ("Stop");
         });
-        /*melos-nullsafety-remove-start*/
-        fail("Should have thrown");
-        /*melos-nullsafety-remove-end*/
       } catch (e) {
         DocumentSnapshot snapshot = await documentReference.get();
         expect(snapshot['foo'], equals('bar'));
@@ -73,9 +70,6 @@ void runTransactionTests() {
         await firestore.runTransaction((Transaction transaction) async {
           throw StateError('foo');
         });
-        /*melos-nullsafety-remove-start*/
-        fail("Transaction should not have resolved");
-        /*melos-nullsafety-remove-end*/
       } on StateError catch (e) {
         expect(e.message, equals('foo'));
         return;

@@ -26,8 +26,8 @@ class FirebaseCoreWeb extends FirebasePlatform {
   /// using the platform Firebase integration.
   @override
   Future<FirebaseAppPlatform> initializeApp(
-      {String /*?*/ name, FirebaseOptions /*?*/ options}) async {
-    firebase.App /*?*/ app;
+      {String? name, FirebaseOptions? options}) async {
+    firebase.App? app;
 
     if (name == defaultFirebaseAppName) {
       throw noDefaultAppInitialization();
@@ -45,12 +45,6 @@ class FirebaseCoreWeb extends FirebasePlatform {
 
         rethrow;
       }
-
-      /*melos-nullsafety-remove-start*/
-      if (app == null) {
-        throw coreNotInitialized();
-      }
-      /*melos-nullsafety-remove-end*/
     } else {
       assert(options != null,
           "FirebaseOptions cannot be null when creating a secondary Firebase app.");
@@ -58,7 +52,7 @@ class FirebaseCoreWeb extends FirebasePlatform {
       try {
         app = firebase.initializeApp(
           name: name,
-          apiKey: options.apiKey,
+          apiKey: options!.apiKey,
           authDomain: options.authDomain,
           databaseURL: options.databaseURL,
           projectId: options.projectId,

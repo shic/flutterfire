@@ -20,7 +20,7 @@ import 'utils/auto_id_generator.dart';
 /// errors, now you know why.
 class MethodChannelCollectionReference extends MethodChannelQuery
     implements CollectionReferencePlatform {
-  Pointer _pointer;
+  late Pointer _pointer;
 
   /// Create a [MethodChannelCollectionReference] instance.
   MethodChannelCollectionReference(
@@ -36,8 +36,8 @@ class MethodChannelCollectionReference extends MethodChannelQuery
   /// A string containing the slash-separated path to this instance
   /// (relative to the root of the database).
   @override
-  DocumentReferencePlatform get parent {
-    String parentPath = _pointer.parentPath();
+  DocumentReferencePlatform? get parent {
+    String? parentPath = _pointer.parentPath();
     return parentPath == null
         ? null
         : MethodChannelDocumentReference(firestore, parentPath);
@@ -54,7 +54,7 @@ class MethodChannelCollectionReference extends MethodChannelQuery
       o.path == path;
 
   @override
-  DocumentReferencePlatform doc([String path]) {
+  DocumentReferencePlatform doc([String? path]) {
     String documentPath;
 
     if (path != null) {

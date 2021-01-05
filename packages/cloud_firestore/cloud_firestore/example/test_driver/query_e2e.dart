@@ -1,4 +1,4 @@
-// @dart = 2.9
+
 
 // Copyright 2020, the Chromium project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
@@ -13,7 +13,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 void runQueryTests() {
   group('$Query', () {
-    /*late*/ FirebaseFirestore firestore;
+    late FirebaseFirestore firestore;
 
     setUpAll(() async {
       firestore = FirebaseFirestore.instance;
@@ -1055,7 +1055,7 @@ void runQueryTests() {
 
         expect(snapshot.docs.length, equals(3));
         snapshot.docs.forEach((doc) {
-          String status = doc['status'];
+          String? status = doc['status'];
           expect(status == 'Ready to Ship' || status == 'Ordered', isTrue);
         });
       });
@@ -1083,7 +1083,7 @@ void runQueryTests() {
 
         expect(snapshot.docs.length, equals(3));
         snapshot.docs.forEach((doc) {
-          String status = doc['status'];
+          String? status = doc['status'];
           expect(status == 'Ready to Ship' || status == 'Ordered', isTrue);
         });
       });
@@ -1111,7 +1111,7 @@ void runQueryTests() {
 
         expect(snapshot.docs.length, equals(1));
         snapshot.docs.forEach((doc) {
-          String status = doc['status'];
+          String? status = doc['status'];
           expect(status == 'Incomplete', isTrue);
         });
       });

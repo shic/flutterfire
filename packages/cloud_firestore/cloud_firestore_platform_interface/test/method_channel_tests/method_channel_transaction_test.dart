@@ -50,15 +50,12 @@ void main() {
               'data': <String, dynamic>{'key1': 'val1'},
               'metadata': kMockSnapshotMetadata,
             };
-            /*melos-nullsafety-remove-start*/
-            break;
-          /*melos-nullsafety-remove-end*/
           default:
             return null;
         }
       });
     });
-    /*late*/ TransactionPlatform transaction;
+    late TransactionPlatform transaction;
     final mockDocumentReference = MockDocumentReference();
     when(mockDocumentReference.path).thenReturn("$kCollectionId/$kDocumentId");
     when(mockDocumentReference.id).thenReturn("$kDocumentId");

@@ -14,9 +14,9 @@ import 'method_channel_firestore.dart';
 /// communicate with Firebase plugins.
 class MethodChannelTransaction extends TransactionPlatform {
   /// [FirebaseApp] name used for this [MethodChannelTransaction]
-  final String /*!*/ appName;
+  final String appName;
   int _transactionId;
-  FirebaseFirestorePlatform /*!*/ _firestore;
+  FirebaseFirestorePlatform _firestore;
 
   /// Constructor.
   MethodChannelTransaction(int transactionId, this.appName)
@@ -41,13 +41,13 @@ class MethodChannelTransaction extends TransactionPlatform {
     assert(_commands.isEmpty,
         "Transactions require all reads to be executed before all writes.");
 
-    final Map<String, dynamic> result = await MethodChannelFirebaseFirestore
+    final Map<String, dynamic> result = await (MethodChannelFirebaseFirestore
         .channel
         .invokeMapMethod<String, dynamic>('Transaction#get', <String, dynamic>{
       'firestore': _firestore,
       'transactionId': _transactionId,
       'reference': _firestore.doc(documentPath),
-    });
+    }) as FutureOr<Map<String, dynamic>>);
 
     return DocumentSnapshotPlatform(
       _firestore,
@@ -82,7 +82,7 @@ class MethodChannelTransaction extends TransactionPlatform {
 
   @override
   MethodChannelTransaction set(String documentPath, Map<String, dynamic> data,
-      [SetOptions options]) {
+      [SetOptions? options]) {
     _commands.add(<String, dynamic>{
       'type': 'SET',
       'path': documentPath,

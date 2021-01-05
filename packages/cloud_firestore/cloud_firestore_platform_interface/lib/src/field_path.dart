@@ -14,22 +14,12 @@ String _reserved = "Paths must not contain '~', '*', '/', '[', or ']'.";
 /// contains a '.'.
 class FieldPath {
   /// The [List] of components which make up this [FieldPath].
-  final List<String /*!*/ > /*!*/ components;
+  final List<String > components;
 
   /// Creates a new [FieldPath].
   FieldPath(this.components /*!*/) {
-    /*melos-nullsafety-remove-start*/
-    assert(components != null);
-    /*melos-nullsafety-remove-end*/
     assert(components.isNotEmpty);
-    assert(
-        components
-            .where((component) =>
-                /*melos-nullsafety-remove-start*/
-                component == null ||
-                /*melos-nullsafety-remove-end*/
-                component.isEmpty)
-            .isEmpty,
+    assert(components.where((component) => component.isEmpty).isEmpty,
         "Expected all FieldPath components to be non-empty strings.");
   }
 

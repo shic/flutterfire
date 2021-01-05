@@ -30,9 +30,6 @@ class Transaction {
 
   /// Deletes the document referred to by the provided [documentReference].
   Transaction delete(DocumentReference documentReference) {
-    /*melos-nullsafety-remove-start*/
-    assert(documentReference != null);
-    /*melos-nullsafety-remove-end*/
     assert(documentReference.firestore == _firestore,
         "the document provided is from a different Firestore instance");
 
@@ -43,17 +40,13 @@ class Transaction {
   /// The update will fail if applied to a document that does not exist.
   Transaction update(
       DocumentReference documentReference, Map<String, dynamic> data) {
-    /*melos-nullsafety-remove-start*/
-    assert(documentReference != null);
-    assert(data != null);
-    /*melos-nullsafety-remove-end*/
     assert(documentReference.firestore == _firestore,
         "the document provided is from a different Firestore instance");
 
     return Transaction._(
         _firestore,
         _delegate.update(documentReference.path,
-            _CodecUtility.replaceValueWithDelegatesInMap(data)));
+            _CodecUtility.replaceValueWithDelegatesInMap(data)!));
   }
 
   /// Writes to the document referred to by the provided [DocumentReference].
@@ -61,7 +54,7 @@ class Transaction {
   /// [SetOptions], the provided data can be merged into the existing document.
   Transaction set(
       DocumentReference documentReference, Map<String, dynamic> data,
-      [SetOptions /*?*/ options]) {
+      [SetOptions? options]) {
     assert(documentReference.firestore == _firestore,
         "the document provided is from a different Firestore instance");
 
@@ -70,7 +63,7 @@ class Transaction {
         _delegate.set(
             documentReference.path,
             // TODO(ehesp): `options` should be nullable after platform interface null safe is available
-            _CodecUtility.replaceValueWithDelegatesInMap(data),
-            options));
+            _CodecUtility.replaceValueWithDelegatesInMap(data)!,
+            options!));
   }
 }

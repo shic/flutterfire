@@ -166,7 +166,7 @@ class _FilmListState extends State<FilmList> {
               return Center(child: Text(stream.error.toString()));
             }
 
-            QuerySnapshot querySnapshot = stream.data;
+            QuerySnapshot querySnapshot = stream.data!;
 
             return ListView.builder(
               itemCount: querySnapshot.size,
@@ -186,7 +186,7 @@ class Movie extends StatelessWidget {
   Movie(this.snapshot);
 
   /// Returns the [DocumentSnapshot] data as a a [Map].
-  Map<String, dynamic> /*?*/ get movie {
+  Map<String, dynamic>? get movie {
     return snapshot.data();
   }
 
@@ -194,7 +194,7 @@ class Movie extends StatelessWidget {
   Widget get poster {
     return Container(
       width: 100,
-      child: Center(child: Image.network(movie['poster'])),
+      child: Center(child: Image.network(movie!['poster'])),
     );
   }
 
@@ -210,7 +210,7 @@ class Movie extends StatelessWidget {
             genres,
             Likes(
               reference: snapshot.reference,
-              currentLikes: movie['likes'],
+              currentLikes: movie!['likes'],
             )
           ],
         ));
@@ -218,7 +218,7 @@ class Movie extends StatelessWidget {
 
   /// Return the movie title.
   Widget get title {
-    return Text("${movie['title']} (${movie['year']})",
+    return Text("${movie!['title']} (${movie!['year']})",
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold));
   }
 
@@ -228,16 +228,16 @@ class Movie extends StatelessWidget {
         padding: EdgeInsets.only(top: 8),
         child: Row(children: [
           Padding(
-              child: Text('Rated: ${movie['rated']}'),
+              child: Text('Rated: ${movie!['rated']}'),
               padding: EdgeInsets.only(right: 8)),
-          Text('Runtime: ${movie['runtime']}'),
+          Text('Runtime: ${movie!['runtime']}'),
         ]));
   }
 
   /// Returns a list of genre movie tags.
   List<Widget> genreItems() {
     List<Widget> items = <Widget>[];
-    movie['genre'].forEach((genre) {
+    movie!['genre'].forEach((genre) {
       items.add(Padding(
         child: Chip(
             label: Text(genre, style: TextStyle(color: Colors.white)),
@@ -269,14 +269,14 @@ class Movie extends StatelessWidget {
 /// Displays and manages the movie "like" count.
 class Likes extends StatefulWidget {
   /// The [DocumentReference] relating to the counter.
-  final DocumentReference /*!*/ reference;
+  final DocumentReference reference;
 
   /// The number of current likes (before manipulation).
-  final num /*!*/ currentLikes;
+  final num currentLikes;
 
   /// Constructs a new [Likes] instance with a given [DocumentReference] and
   /// current like count.
-  Likes({Key key, this.reference, this.currentLikes}) : super(key: key);
+  Likes({Key? key, required this.reference, required this.currentLikes}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -285,7 +285,7 @@ class Likes extends StatefulWidget {
 }
 
 class _Likes extends State<Likes> {
-  int /*?*/ _likes;
+  int? _likes;
 
   _onLike(int current) async {
     // Increment the "like" count straight away to show feedback to the user.
@@ -295,15 +295,15 @@ class _Likes extends State<Likes> {
 
     try {
       // Return and set the updated "likes" count from the transaction
-      int newLikes = await FirebaseFirestore.instance
-          .runTransaction<int>((transaction) async {
+      int? newLikes = await FirebaseFirestore.instance
+          .runTransaction<int?>((transaction) async {
         DocumentSnapshot txSnapshot = await transaction.get(widget.reference);
 
         if (!txSnapshot.exists) {
           throw Exception("Document does not exist!");
         }
 
-        int updatedLikes = (txSnapshot['likes'] ?? 0) + 1;
+        int? updatedLikes = (txSnapshot['likes'] ?? 0) + 1;
         transaction.update(widget.reference, {'likes': updatedLikes});
         return updatedLikes;
       });
@@ -325,7 +325,7 @@ class _Likes extends State<Likes> {
 
   @override
   Widget build(BuildContext context) {
-    int currentLikes = _likes ?? widget.currentLikes ?? 0;
+    int currentLikes = _likes ?? widget.currentLikes as int? ?? 0;
 
     return Row(children: [
       IconButton(

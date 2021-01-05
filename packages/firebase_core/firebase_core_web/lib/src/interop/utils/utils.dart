@@ -15,7 +15,7 @@ import 'js_interop.dart' as js;
 
 /// Returns Dart representation from JS Object.
 dynamic dartify(dynamic jsObject,
-    [dynamic Function(dynamic object) /*?*/ customDartify]) {
+    [dynamic Function(dynamic object)? customDartify]) {
   if (_isBasicType(jsObject)) {
     return jsObject;
   }
@@ -46,19 +46,19 @@ dynamic dartify(dynamic jsObject,
 
 // Converts an Iterable into a JS Array
 dynamic jsifyList(Iterable list,
-    [Object Function(Object object) /*?*/ customJsify]) {
-  return js.toJSArray(list.map((item) => jsify(item, customJsify)).toList());
+    [Object Function(Object object)? customJsify]) {
+  return js.toJSArray(list.map((item) => jsify(item, customJsify as dynamic Function(dynamic)?)).toList());
 }
 
 // Returns the JS implementation from Dart Object.
 dynamic jsify(Object dartObject,
-    [dynamic Function(dynamic object) /*?*/ customJsify]) {
+    [dynamic Function(dynamic object)? customJsify]) {
   if (_isBasicType(dartObject)) {
     return dartObject;
   }
 
   if (dartObject is Iterable) {
-    return jsifyList(dartObject, customJsify);
+    return jsifyList(dartObject, customJsify as Object Function(Object)?);
   }
 
   if (dartObject is Map) {

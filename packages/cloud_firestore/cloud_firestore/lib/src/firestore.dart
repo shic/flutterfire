@@ -19,20 +19,20 @@ class FirebaseFirestore extends FirebasePluginPlatform {
   // Cached and lazily loaded instance of [FirestorePlatform] to avoid
   // creating a [MethodChannelFirestore] when not needed or creating an
   // instance with the default app before a user specifies an app.
-  FirebaseFirestorePlatform _delegatePackingProperty;
+  FirebaseFirestorePlatform? _delegatePackingProperty;
 
-  FirebaseFirestorePlatform /*!*/ get _delegate {
+  FirebaseFirestorePlatform get _delegate {
     if (_delegatePackingProperty == null) {
       _delegatePackingProperty =
           FirebaseFirestorePlatform.instanceFor(app: app);
     }
-    return _delegatePackingProperty;
+    return _delegatePackingProperty!;
   }
 
   /// The [FirebaseApp] for this current [FirebaseFirestore] instance.
   FirebaseApp app;
 
-  FirebaseFirestore._({/*required*/ this.app})
+  FirebaseFirestore._({/*required*/ required this.app})
       : super(app.name, 'plugins.flutter.io/firebase_firestore');
 
   static final Map<String, FirebaseFirestore> _cachedInstances = {};
@@ -45,12 +45,9 @@ class FirebaseFirestore extends FirebasePluginPlatform {
   }
 
   /// Returns an instance using a specified [FirebaseApp].
-  static FirebaseFirestore /*!*/ instanceFor({FirebaseApp app}) {
-    /*melos-nullsafety-remove-start*/
-    assert(app != null);
-    /*melos-nullsafety-remove-end*/
+  static FirebaseFirestore instanceFor({required FirebaseApp app}) {
     if (_cachedInstances.containsKey(app.name)) {
-      return _cachedInstances[app.name];
+      return _cachedInstances[app.name]!;
     }
 
     FirebaseFirestore newInstance = FirebaseFirestore._(app: app);
@@ -59,22 +56,8 @@ class FirebaseFirestore extends FirebasePluginPlatform {
     return newInstance;
   }
 
-  /*melos-nullsafety-remove-start*/
-  // ignore: public_member_api_docs
-  @Deprecated(
-      "Constructing Firestore is deprecated, use 'FirebaseFirestore.instance' or 'FirebaseFirestore.instanceFor' instead")
-  factory FirebaseFirestore({/*required*/ FirebaseApp app}) {
-    return FirebaseFirestore.instanceFor(app: app);
-  }
-  /*melos-nullsafety-remove-end*/
-
   /// Gets a [CollectionReference] for the specified Firestore path.
   CollectionReference collection(String collectionPath) {
-    /*melos-nullsafety-remove-start*/
-    assert(collectionPath != null, "a collection path cannot be null");
-    assert(collectionPath.isNotEmpty,
-        "a collectionPath path must be a non-empty string");
-    /*melos-nullsafety-remove-end*/
     assert(!collectionPath.contains("//"),
         "a collection path must not contain '//'");
     assert(isValidCollectionPath(collectionPath),
@@ -101,17 +84,12 @@ class FirebaseFirestore extends FirebasePluginPlatform {
   ///
   /// This is a web-only method. Use [Settings.persistenceEnabled] for non-web platforms.
   Future<void> enablePersistence(
-      [PersistenceSettings /*?*/ persistenceSettings]) async {
-    return _delegate.enablePersistence(persistenceSettings);
+      [PersistenceSettings? persistenceSettings]) async {
+    return _delegate.enablePersistence(persistenceSettings!);
   }
 
   /// Gets a [Query] for the specified collection group.
   Query collectionGroup(String collectionPath) {
-    /*melos-nullsafety-remove-start*/
-    assert(collectionPath != null, "a collection path cannot be null");
-    assert(collectionPath.isNotEmpty,
-        "a collection path must be a non-empty string");
-    /*melos-nullsafety-remove-end*/
     assert(!collectionPath.contains("/"),
         "a collection path passed to collectionGroup() cannot contain '/'");
 
@@ -129,11 +107,6 @@ class FirebaseFirestore extends FirebasePluginPlatform {
 
   /// Gets a [DocumentReference] for the specified Firestore path.
   DocumentReference doc(String documentPath) {
-    /*melos-nullsafety-remove-start*/
-    assert(documentPath != null, "a document path cannot be null");
-    assert(
-        documentPath.isNotEmpty, "a document path must be a non-empty string");
-    /*melos-nullsafety-remove-end*/
     assert(!documentPath.contains("//"),
         "a collection path must not contain '//'");
     assert(isValidDocumentPath(documentPath),
@@ -141,12 +114,6 @@ class FirebaseFirestore extends FirebasePluginPlatform {
 
     return DocumentReference._(this, _delegate.doc(documentPath));
   }
-
-  /*melos-nullsafety-remove-start*/
-  @Deprecated("Deprecated in favor of `.doc()`")
-  // ignore: public_member_api_docs
-  DocumentReference document(String documentPath) => doc(documentPath);
-  /*melos-nullsafety-remove-end*/
 
   /// Enables the network for this instance. Any pending local-only writes
   /// will be written to the remote servers.
@@ -181,12 +148,8 @@ class FirebaseFirestore extends FirebasePluginPlatform {
   ///
   /// By default transactions are limited to 5 seconds of execution time. This
   /// timeout can be adjusted by setting the timeout parameter.
-  Future<T /*!*/ > runTransaction<T>(TransactionHandler<T> transactionHandler,
+  Future<T > runTransaction<T>(TransactionHandler<T> transactionHandler,
       {Duration timeout = const Duration(seconds: 30)}) async {
-    /*melos-nullsafety-remove-start*/
-    assert(transactionHandler != null, "transactionHandler cannot be null");
-    /*melos-nullsafety-remove-end*/
-
     return _delegate.runTransaction((transaction) async {
       return transactionHandler(Transaction._(this, transaction));
     }, timeout: timeout);
@@ -246,27 +209,3 @@ class FirebaseFirestore extends FirebasePluginPlatform {
   @override
   String toString() => '$FirebaseFirestore(app: ${app.name})';
 }
-
-/*melos-nullsafety-remove-start*/
-/// Extends the [FirebaseFirestore] class to allow for deprecated usage of
-/// using [Firebase] directly.
-@Deprecated("Class Firestore is deprecated, use 'FirebaseFirestore' instead.")
-class Firestore extends FirebaseFirestore {
-  // ignore: public_member_api_docs
-  @Deprecated(
-      "Constructing Firestore is deprecated, use 'FirebaseFirestore.instance' or 'FirebaseFirestore.instanceFor' instead")
-  factory Firestore({/*required*/ FirebaseApp app}) {
-    return FirebaseFirestore.instanceFor(app: app);
-  }
-
-  /// Returns an instance using the default [FirebaseApp].
-  static FirebaseFirestore get instance {
-    return FirebaseFirestore.instance;
-  }
-
-  /// Returns an instance using a specified [FirebaseApp].
-  static FirebaseFirestore instanceFor({/*required*/ FirebaseApp app}) {
-    return FirebaseFirestore.instanceFor(app: app);
-  }
-}
-/*melos-nullsafety-remove-end*/

@@ -16,7 +16,7 @@ const _kDocumentId = "document";
 void main() {
   initializeMethodChannel();
 
-  /*late*/ MethodChannelCollectionReference _testCollection;
+  late MethodChannelCollectionReference _testCollection;
 
   setUpAll(() async {
     await Firebase.initializeApp(
@@ -38,7 +38,7 @@ void main() {
       expect(
           MethodChannelCollectionReference(FirebaseFirestorePlatform.instance,
                   '$_kCollectionId/$_kDocumentId/test')
-              .parent
+              .parent!
               .path,
           equals("$_kCollectionId/$_kDocumentId"));
     });

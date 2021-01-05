@@ -12,7 +12,7 @@ import 'utils/exception.dart';
 /// A web specific implementation of [Transaction].
 class TransactionWeb extends TransactionPlatform {
   final firestore_interop.Firestore _webFirestoreDelegate;
-  final firestore_interop.Transaction /*!*/ _webTransactionDelegate;
+  final firestore_interop.Transaction _webTransactionDelegate;
 
   FirebaseFirestorePlatform _firestore;
 
@@ -23,7 +23,7 @@ class TransactionWeb extends TransactionPlatform {
 
   @override
   TransactionWeb delete(String documentPath) {
-    _webTransactionDelegate.delete(_webFirestoreDelegate.doc(documentPath));
+    _webTransactionDelegate.delete(_webFirestoreDelegate.doc(documentPath)!);
     return this;
   }
 
@@ -31,7 +31,7 @@ class TransactionWeb extends TransactionPlatform {
   Future<DocumentSnapshotPlatform> get(String documentPath) async {
     try {
       final webDocumentSnapshot = await _webTransactionDelegate
-          .get(_webFirestoreDelegate.doc(documentPath));
+          .get(_webFirestoreDelegate.doc(documentPath)!);
 
       return convertWebDocumentSnapshot(this._firestore, webDocumentSnapshot);
     } catch (e) {
@@ -41,7 +41,7 @@ class TransactionWeb extends TransactionPlatform {
 
   @override
   TransactionWeb set(String documentPath, Map<String, dynamic> data,
-      [SetOptions /*?*/ options]) {
+      [SetOptions? options]) {
     _webTransactionDelegate.set(_webFirestoreDelegate.doc(documentPath),
         CodecUtility.encodeMapData(data), convertSetOptions(options));
     return this;

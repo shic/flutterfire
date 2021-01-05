@@ -12,10 +12,10 @@ import 'package:js/js.dart';
 class FirebaseAppOptionsMock {
   // mock with minimum required fields for testing
   external factory FirebaseAppOptionsMock(
-      {String apiKey,
-      String appId,
-      String messagingSenderId,
-      String projectId});
+      {String? apiKey,
+      String? appId,
+      String? messagingSenderId,
+      String? projectId});
 
   external String get apiKey;
 
@@ -30,8 +30,8 @@ class FirebaseAppOptionsMock {
 @anonymous
 class FirebaseAppMock {
   external factory FirebaseAppMock({
-    String name,
-    FirebaseAppOptionsMock options,
+    String? name,
+    FirebaseAppOptionsMock? options,
   });
 
   external String get name;
@@ -42,7 +42,7 @@ class FirebaseAppMock {
 @JS()
 @anonymous
 class FirebaseMock {
-  external factory FirebaseMock({Function app});
+  external factory FirebaseMock({Function? app});
 
   external Function get app;
 }
@@ -51,7 +51,7 @@ class FirebaseMock {
 class Promise<T> {
   external Promise(void executor(void resolve(T result), Function reject));
 
-  external Promise then(void onFulfilled(T result), [Function onRejected]);
+  external Promise then(void onFulfilled(T result), [Function? onRejected]);
 }
 
 // Wire to the global 'window.firebase' object.

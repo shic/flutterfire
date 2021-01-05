@@ -16,7 +16,7 @@ import '../persistence_settings.dart';
 abstract class FirebaseFirestorePlatform extends PlatformInterface {
   /// The [FirebaseApp] this instance was initialized with.
   @protected
-  final FirebaseApp /*?*/ appInstance;
+  final FirebaseApp? appInstance;
 
   /// Create an instance using [app]
   FirebaseFirestorePlatform({this.appInstance /*?*/
@@ -24,18 +24,18 @@ abstract class FirebaseFirestorePlatform extends PlatformInterface {
       : super(token: _token);
 
   /// Returns the [FirebaseApp] for the current instance.
-  FirebaseApp /*!*/ get app {
+  FirebaseApp get app {
     if (appInstance == null) {
       return Firebase.app();
     }
 
-    return appInstance;
+    return appInstance!;
   }
 
   static final Object _token = Object();
 
   /// Create an instance using [app] using the existing implementation
-  factory FirebaseFirestorePlatform.instanceFor({FirebaseApp app}) {
+  factory FirebaseFirestorePlatform.instanceFor({required FirebaseApp app}) {
     return FirebaseFirestorePlatform.instance.delegateFor(app: app);
   }
 
@@ -47,10 +47,10 @@ abstract class FirebaseFirestorePlatform extends PlatformInterface {
     if (_instance == null) {
       _instance = MethodChannelFirebaseFirestore(app: Firebase.app());
     }
-    return _instance;
+    return _instance!;
   }
 
-  static FirebaseFirestorePlatform /*?*/ _instance;
+  static FirebaseFirestorePlatform? _instance;
 
   /// Sets the [FirebaseFirestorePlatform.instance]
   static set instance(FirebaseFirestorePlatform instance) {
@@ -61,7 +61,7 @@ abstract class FirebaseFirestorePlatform extends PlatformInterface {
   /// Enables delegates to create new instances of themselves if a none default
   /// [FirebaseApp] instance is required by the user.
   @protected
-  FirebaseFirestorePlatform delegateFor({@required FirebaseApp /*!*/ app}) {
+  FirebaseFirestorePlatform delegateFor({required FirebaseApp app}) {
     throw UnimplementedError('delegateFor() is not implemented');
   }
 
@@ -81,12 +81,12 @@ abstract class FirebaseFirestorePlatform extends PlatformInterface {
 
   /// Enable persistence of Firestore data. Web only.
   Future<void> enablePersistence(
-      [PersistenceSettings /*?*/ persistenceSettings]) async {
+      [PersistenceSettings? persistenceSettings]) async {
     throw UnimplementedError('enablePersistence() is not implemented');
   }
 
   /// Gets a [CollectionReferencePlatform] for the specified Firestore path.
-  CollectionReferencePlatform collection(String /*!*/ collectionPath) {
+  CollectionReferencePlatform collection(String collectionPath) {
     throw UnimplementedError('collection() is not implemented');
   }
 

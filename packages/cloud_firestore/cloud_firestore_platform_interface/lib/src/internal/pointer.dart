@@ -10,10 +10,7 @@
 class Pointer {
   /// Create instance of [Pointer]
   Pointer(String path)
-      : /*melos-nullsafety-remove-start*/
-        assert(path != null),
-        /*melos-nullsafety-remove-end*/
-        components =
+      : components =
             path.split('/').where((element) => element.isNotEmpty).toList();
 
   /// The Firestore normalized path of the [Pointer].
@@ -63,7 +60,7 @@ class Pointer {
   }
 
   /// Returns a path pointing to the parent of the current path.
-  String /*?*/ parentPath() {
+  String? parentPath() {
     if (components.length < 2) {
       return null;
     }

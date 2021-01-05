@@ -24,7 +24,7 @@ class MethodChannelFieldValueFactory extends FieldValueFactoryPlatform {
       MethodChannelFieldValue(FieldValueType.delete, null);
 
   @override
-  MethodChannelFieldValue increment(num value) {
+  MethodChannelFieldValue? increment(num value) {
     // It is a compile-time error for any type other than `int` or `double` to
     // attempt to extend or implement `num`.
     assert(value is int || value is double);

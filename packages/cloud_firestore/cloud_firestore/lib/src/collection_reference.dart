@@ -19,8 +19,8 @@ class CollectionReference extends Query {
   /// Returns the parent [DocumentReference] of this collection or `null`.
   ///
   /// If this collection is a root collection, `null` is returned.
-  DocumentReference get parent {
-    DocumentReferencePlatform /*?*/ _documentReferencePlatform =
+  DocumentReference? get parent {
+    DocumentReferencePlatform? _documentReferencePlatform =
         _delegate.parent;
 
     // Only subcollections have a parent
@@ -41,9 +41,6 @@ class CollectionReference extends Query {
   /// The unique key generated is prefixed with a client-generated timestamp
   /// so that the resulting list will be chronologically-sorted.
   Future<DocumentReference> add(Map<String, dynamic> data) async {
-    /*melos-nullsafety-remove-start*/
-    assert(data != null);
-    /*melos-nullsafety-remove-end*/
     final DocumentReference newDocument = doc();
     await newDocument.set(data);
     return newDocument;
@@ -55,20 +52,14 @@ class CollectionReference extends Query {
   ///
   /// The unique key generated is prefixed with a client-generated timestamp
   /// so that the resulting list will be chronologically-sorted.
-  DocumentReference doc([String /*?*/ path]) {
+  DocumentReference doc([String? path]) {
     if (path != null) {
       assert(path.isNotEmpty, "a document path must be a non-empty string");
       assert(!path.contains("//"), "a document path must not contain '//'");
       assert(path != '/', "a document path must point to a valid document");
     }
-    return DocumentReference._(firestore, _delegate.doc(path));
+    return DocumentReference._(firestore, _delegate.doc(path!));
   }
-
-  /*melos-nullsafety-remove-start*/
-  @Deprecated("Deprecated in favor of `.doc()`")
-  // ignore: public_member_api_docs
-  DocumentReference document([String path]) => doc(path);
-  /*melos-nullsafety-remove-end*/
 
   @override
   bool operator ==(dynamic o) =>

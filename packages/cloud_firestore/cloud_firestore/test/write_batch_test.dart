@@ -12,11 +12,11 @@ import './mock.dart';
 
 void main() {
   setupCloudFirestoreMocks();
-  /*late*/ FirebaseFirestore firestore;
-  /*late*/ FirebaseFirestore firestoreSecondary;
+  late FirebaseFirestore firestore;
+  late FirebaseFirestore firestoreSecondary;
 
   MethodChannelFirebaseFirestore.channel.setMockMethodCallHandler((call) async {
-    String /*!*/ path = call.arguments['path'];
+    String path = call.arguments['path'];
 
     if (call.method == 'DocumentReference#get' && path == 'doc/exists') {
       return {

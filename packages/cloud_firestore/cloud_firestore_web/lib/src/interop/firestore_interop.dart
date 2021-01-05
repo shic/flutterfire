@@ -39,7 +39,7 @@ abstract class FirestoreJsImpl {
   external DocumentReferenceJsImpl doc(String documentPath);
 
   external PromiseJsImpl<Null> enablePersistence(
-      [PersistenceSettings settings]);
+      [PersistenceSettings? settings]);
 
   external void Function() onSnapshotsInSync(observer);
 
@@ -66,7 +66,7 @@ abstract class WriteBatchJsImpl {
   external WriteBatchJsImpl delete(DocumentReferenceJsImpl documentRef);
 
   external WriteBatchJsImpl set(DocumentReferenceJsImpl documentRef, data,
-      [SetOptions options]);
+      [SetOptions? options]);
 
   external WriteBatchJsImpl update(
       DocumentReferenceJsImpl documentRef, dataOrFieldsAndValues);
@@ -90,7 +90,7 @@ class CollectionReferenceJsImpl extends QueryJsImpl {
 
   external PromiseJsImpl<DocumentReferenceJsImpl> add(data);
 
-  external DocumentReferenceJsImpl doc([String documentPath]);
+  external DocumentReferenceJsImpl doc([String? documentPath]);
 
   external bool isEqual(CollectionReferenceJsImpl other);
 }
@@ -100,7 +100,7 @@ class CollectionReferenceJsImpl extends QueryJsImpl {
 class PersistenceSettings {
   external bool get synchronizeTabs;
 
-  external factory PersistenceSettings({bool synchronizeTabs});
+  external factory PersistenceSettings({bool? synchronizeTabs});
 }
 
 /// A [FieldPath] refers to a field in a document.
@@ -115,15 +115,15 @@ class FieldPath {
   /// field name is provided, the path will point to a nested field in a
   /// document.
   external factory FieldPath(String fieldName0,
-      [String fieldName1,
-      String fieldName2,
-      String fieldName3,
-      String fieldName4,
-      String fieldName5,
-      String fieldName6,
-      String fieldName7,
-      String fieldName8,
-      String fieldName9]);
+      [String? fieldName1,
+      String? fieldName2,
+      String? fieldName3,
+      String? fieldName4,
+      String? fieldName5,
+      String? fieldName6,
+      String? fieldName7,
+      String? fieldName8,
+      String? fieldName9]);
 
   /// Returns a special sentinel FieldPath to refer to the ID of a document.
   /// It can be used in queries to sort or filter by the document ID.
@@ -222,15 +222,15 @@ abstract class DocumentReferenceJsImpl {
 
   external PromiseJsImpl<Null> delete();
 
-  external PromiseJsImpl<DocumentSnapshotJsImpl> get([GetOptions options]);
+  external PromiseJsImpl<DocumentSnapshotJsImpl> get([GetOptions? options]);
 
   external void Function() onSnapshot(
     optionsOrObserverOrOnNext,
     observerOrOnNextOrOnError, [
-    Func1<FirebaseError, dynamic> onError,
+    Func1<FirebaseError, dynamic>? onError,
   ]);
 
-  external PromiseJsImpl<Null> set(data, [SetOptions options]);
+  external PromiseJsImpl<Null> set(data, [SetOptions? options]);
 
   external PromiseJsImpl<Null> update(dataOrFieldsAndValues);
 }
@@ -302,9 +302,9 @@ abstract class QueryJsImpl {
 
   external PromiseJsImpl<QuerySnapshotJsImpl> get();
 
-  external QueryJsImpl limit(num limit);
+  external QueryJsImpl limit(num? limit);
 
-  external QueryJsImpl limitToLast(num limit);
+  external QueryJsImpl limitToLast(num? limit);
 
   external void Function() onSnapshot(
       SnapshotListenOptions options,
@@ -312,7 +312,7 @@ abstract class QueryJsImpl {
       Func1<FirebaseError, dynamic> onError);
 
   external QueryJsImpl orderBy(/*String|FieldPath*/ fieldPath,
-      [String /*'desc'|'asc'*/ directionStr]);
+      [String? /*'desc'|'asc'*/ directionStr]);
 
   external QueryJsImpl startAfter(
       /*DocumentSnapshot|List<dynamic>*/
@@ -330,7 +330,7 @@ abstract class QueryJsImpl {
 abstract class QuerySnapshotJsImpl {
   // TODO: [SnapshotListenOptions] not currently used.
   external List<DocumentChangeJsImpl> docChanges(
-      [SnapshotListenOptions options]);
+      [SnapshotListenOptions? options]);
 
   external List<DocumentSnapshotJsImpl> get docs;
 
@@ -368,7 +368,7 @@ abstract class TransactionJsImpl {
       DocumentReferenceJsImpl documentRef);
 
   external TransactionJsImpl set(DocumentReferenceJsImpl documentRef, data,
-      [SetOptions options]);
+      [SetOptions? options]);
 
   external TransactionJsImpl update(
       DocumentReferenceJsImpl documentRef, dataOrFieldsAndValues);
@@ -426,9 +426,9 @@ abstract class FirestoreError {
 
   external factory FirestoreError(
       {/*|'cancelled'|'unknown'|'invalid-argument'|'deadline-exceeded'|'not-found'|'already-exists'|'permission-denied'|'resource-exhausted'|'failed-precondition'|'aborted'|'out-of-range'|'unimplemented'|'internal'|'unavailable'|'data-loss'|'unauthenticated'*/ code,
-      String message,
-      String name,
-      String stack});
+      String? message,
+      String? name,
+      String? stack});
 }
 
 /// Options for use with `Query.onSnapshot() to control the behavior of the
@@ -443,7 +443,7 @@ abstract class SnapshotListenOptions {
 
   external set includeMetadataChanges(bool value);
 
-  external factory SnapshotListenOptions({bool includeMetadataChanges});
+  external factory SnapshotListenOptions({bool? includeMetadataChanges});
 }
 
 /// Specifies custom configurations for your Cloud Firestore instance.
@@ -459,27 +459,10 @@ abstract class Settings {
 
   external set ssl(bool v);
 
-  /*melos-nullsafety-remove-start*/
-  @Deprecated(
-    'This setting will be removed in a future release. You should update '
-    'your code to expect Timestamp objects and stop using the '
-    'timestampsInSnapshots setting.',
-  )
-  external set timestampsInSnapshots(bool v);
-  /*melos-nullsafety-remove-end*/
-
   external factory Settings({
-    int cacheSizeBytes,
-    String host,
-    bool ssl,
-    /*melos-nullsafety-remove-start*/
-    @Deprecated(
-      'This setting will be removed in a future release. You should update '
-      'your code to expect Timestamp objects and stop using the '
-      'timestampsInSnapshots setting.',
-    )
-        bool timestampsInSnapshots,
-    /*melos-nullsafety-remove-end*/
+    int? cacheSizeBytes,
+    String? host,
+    bool? ssl,
   });
 }
 
@@ -523,7 +506,7 @@ abstract class DocumentListenOptions {
 
   external set includeMetadataChanges(bool v);
 
-  external factory DocumentListenOptions({bool includeMetadataChanges});
+  external factory DocumentListenOptions({bool? includeMetadataChanges});
 }
 
 /// An object to configure the [DocumentReference.get] and [Query.get] behavior.
@@ -533,7 +516,7 @@ abstract class GetOptions {
   /// Describes whether we should get from server or cache.
   external String get source;
 
-  external factory GetOptions({String source});
+  external factory GetOptions({String? source});
 }
 
 /// An object to configure the [WriteBatch.set] behavior.
@@ -550,7 +533,7 @@ abstract class SetOptions {
 
   external set mergeFields(List<String> v);
 
-  external factory SetOptions({bool merge, List<String> mergeFields});
+  external factory SetOptions({bool? merge, List<String>? mergeFields});
 }
 
 /// Options that configure how data is retrieved from a DocumentSnapshot
@@ -568,5 +551,5 @@ abstract class SnapshotOptions {
   /// server value becomes available.
   external String get serverTimestamps;
 
-  external factory SnapshotOptions({String serverTimestamps});
+  external factory SnapshotOptions({String? serverTimestamps});
 }

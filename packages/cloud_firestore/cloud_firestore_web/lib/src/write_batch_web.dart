@@ -12,7 +12,7 @@ import 'utils/codec_utility.dart';
 /// A web specific implementation of [WriteBatch].
 class WriteBatchWeb extends WriteBatchPlatform {
   final firestore_interop.Firestore _webFirestoreDelegate;
-  /*late*/ firestore_interop.WriteBatch /*!*/ _webWriteBatchDelegate;
+  late firestore_interop.WriteBatch _webWriteBatchDelegate;
 
   /// Constructor.
   WriteBatchWeb(this._webFirestoreDelegate)
@@ -30,12 +30,12 @@ class WriteBatchWeb extends WriteBatchPlatform {
 
   @override
   void delete(String documentPath) {
-    _webWriteBatchDelegate.delete(_webFirestoreDelegate.doc(documentPath));
+    _webWriteBatchDelegate.delete(_webFirestoreDelegate.doc(documentPath)!);
   }
 
   @override
   void set(String documentPath, Map<String, dynamic> data,
-      [SetOptions /*?*/ options]) {
+      [SetOptions? options]) {
     _webWriteBatchDelegate.set(_webFirestoreDelegate.doc(documentPath),
         CodecUtility.encodeMapData(data), convertSetOptions(options));
   }

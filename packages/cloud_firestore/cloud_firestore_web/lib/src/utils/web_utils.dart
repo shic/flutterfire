@@ -35,7 +35,7 @@ DocumentSnapshotPlatform convertWebDocumentSnapshot(
     firestore_interop.DocumentSnapshot webSnapshot) {
   return DocumentSnapshotPlatform(
     firestore,
-    webSnapshot.ref.path,
+    webSnapshot.ref!.path,
     <String, dynamic>{
       'data': CodecUtility.decodeMapData(webSnapshot.data()),
       'metadata': <String, bool>{
@@ -52,8 +52,8 @@ DocumentChangePlatform convertWebDocumentChange(
     firestore_interop.DocumentChange webDocumentChange) {
   return (DocumentChangePlatform(
       convertWebDocumentChangeType(webDocumentChange.type),
-      webDocumentChange.oldIndex,
-      webDocumentChange.newIndex,
+      webDocumentChange.oldIndex as int,
+      webDocumentChange.newIndex as int,
       convertWebDocumentSnapshot(firestore, webDocumentChange.doc)));
 }
 
@@ -79,36 +79,30 @@ SnapshotMetadataPlatform convertWebSnapshotMetadata(
 }
 
 /// Converts a [GetOptions] to a [web.GetOptions].
-firestore_interop.GetOptions /*?*/ convertGetOptions(GetOptions /*?*/ options) {
+firestore_interop.GetOptions? convertGetOptions(GetOptions? options) {
   if (options == null) return null;
 
   var source;
-  /*melos-nullsafety-remove-start*/
-  if (options.source != null) {
-    /*melos-nullsafety-remove-end*/
-    switch (options.source) {
-      case Source.serverAndCache:
-        source = 'default';
-        break;
-      case Source.cache:
-        source = 'cache';
-        break;
-      case Source.server:
-        source = 'server';
-        break;
-      default:
-        source = 'default';
-        break;
-    }
-    /*melos-nullsafety-remove-start*/
+  switch (options.source) {
+    case Source.serverAndCache:
+      source = 'default';
+      break;
+    case Source.cache:
+      source = 'cache';
+      break;
+    case Source.server:
+      source = 'server';
+      break;
+    default:
+      source = 'default';
+      break;
   }
-  /*melos-nullsafety-remove-end*/
 
   return firestore_interop.GetOptions(source: source);
 }
 
 /// Converts a [SetOptions] to a [web.SetOptions].
-firestore_interop.SetOptions /*?*/ convertSetOptions(SetOptions options) {
+firestore_interop.SetOptions? convertSetOptions(SetOptions? options) {
   if (options == null) return null;
 
   var parsedOptions;
@@ -116,7 +110,7 @@ firestore_interop.SetOptions /*?*/ convertSetOptions(SetOptions options) {
     parsedOptions = firestore_interop.SetOptions(merge: options.merge);
   } else if (options.mergeFields != null) {
     parsedOptions = firestore_interop.SetOptions(
-        mergeFields: options.mergeFields /*!*/
+        mergeFields: options.mergeFields!
             .map((e) => e.components.toList().join('.'))
             .toList());
   }

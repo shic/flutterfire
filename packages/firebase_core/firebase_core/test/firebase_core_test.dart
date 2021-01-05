@@ -13,7 +13,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('$FirebaseApp', () {
-    /*late*/ MockFirebaseCore mock;
+    late MockFirebaseCore mock;
 
     const FirebaseOptions testOptions = FirebaseOptions(
         apiKey: 'apiKey',

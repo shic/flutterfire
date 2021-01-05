@@ -20,9 +20,6 @@ class MyApp extends StatelessWidget {
 
   Future<void> initializeDefault() async {
     FirebaseApp app = await Firebase.initializeApp();
-    /*melos-nullsafety-remove-start*/
-    assert(app != null);
-    /*melos-nullsafety-remove-end*/
     print('Initialized default app $app');
   }
 
@@ -30,9 +27,6 @@ class MyApp extends StatelessWidget {
     FirebaseApp app =
         await Firebase.initializeApp(name: name, options: firebaseOptions);
 
-    /*melos-nullsafety-remove-start*/
-    assert(app != null);
-    /*melos-nullsafety-remove-end*/
     print('Initialized $app');
   }
 

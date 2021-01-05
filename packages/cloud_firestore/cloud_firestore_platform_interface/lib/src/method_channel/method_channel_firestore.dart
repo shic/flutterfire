@@ -21,41 +21,23 @@ import 'utils/firestore_message_codec.dart';
 /// You can get an instance by calling [FirebaseFirestore.instance].
 class MethodChannelFirebaseFirestore extends FirebaseFirestorePlatform {
   /// Create an instance of [MethodChannelFirebaseFirestore] with optional [FirebaseApp]
-  MethodChannelFirebaseFirestore({FirebaseApp /*!*/ app})
+  MethodChannelFirebaseFirestore({required FirebaseApp app})
       : super(appInstance: app) {
     if (_initialized) return;
     channel.setMethodCallHandler((MethodCall call) async {
       switch (call.method) {
         case 'Firestore#snapshotsInSync':
           return _handleSnapshotsInSync(call.arguments);
-          /*melos-nullsafety-remove-start*/
-          break;
-        /*melos-nullsafety-remove-end*/
         case 'QuerySnapshot#event':
           return _handleQuerySnapshotEvent(call.arguments);
-          /*melos-nullsafety-remove-start*/
-          break;
-        /*melos-nullsafety-remove-end*/
         case 'QuerySnapshot#error':
           return _handleQuerySnapshotError(call.arguments);
-          /*melos-nullsafety-remove-start*/
-          break;
-        /*melos-nullsafety-remove-end*/
         case 'DocumentSnapshot#event':
           return _handleDocumentSnapshotEvent(call.arguments);
-          /*melos-nullsafety-remove-start*/
-          break;
-        /*melos-nullsafety-remove-end*/
         case 'DocumentSnapshot#error':
           return _handleDocumentSnapshotError(call.arguments);
-          /*melos-nullsafety-remove-start*/
-          break;
-        /*melos-nullsafety-remove-end*/
         case 'Transaction#attempt':
           return _handleTransactionAttempt(call.arguments);
-          /*melos-nullsafety-remove-start*/
-          break;
-        /*melos-nullsafety-remove-end*/
         default:
           throw UnimplementedError("${call.method} has not been implemented");
       }
@@ -78,7 +60,7 @@ class MethodChannelFirebaseFirestore extends FirebaseFirestorePlatform {
       return;
     }
 
-    snapshotInSyncObservers[arguments['handle']] /*!*/ .add(null);
+    snapshotInSyncObservers[arguments['handle']]! .add(null);
   }
 
   /// When a [QuerySnapshot] event is fired on the [MethodChannel],
@@ -89,7 +71,7 @@ class MethodChannelFirebaseFirestore extends FirebaseFirestorePlatform {
     }
 
     try {
-      queryObservers[arguments['handle']] /*!*/
+      queryObservers[arguments['handle']]!
           .add(MethodChannelQuerySnapshot(this, arguments['snapshot']));
     } catch (error) {
       _handleQuerySnapshotError(<dynamic, dynamic>{
@@ -123,7 +105,7 @@ class MethodChannelFirebaseFirestore extends FirebaseFirestorePlatform {
           'metadata': snapshotMap['metadata'],
         },
       );
-      documentObservers[arguments['handle']] /*!*/ .add(snapshot);
+      documentObservers[arguments['handle']]! .add(snapshot);
     } catch (error) {
       _handleDocumentSnapshotError(<dynamic, dynamic>{
         'handle': arguments['handle'],
@@ -144,15 +126,15 @@ class MethodChannelFirebaseFirestore extends FirebaseFirestorePlatform {
   /// a response to continue (with commands) or abort the transaction is sent.
   Future<dynamic> _handleTransactionAttempt(
       Map<dynamic, dynamic> arguments) async {
-    final int /*!*/ transactionId = arguments['transactionId'];
+    final int transactionId = arguments['transactionId'];
     final TransactionPlatform transaction =
         MethodChannelTransaction(transactionId, arguments["appName"]);
     final StreamController controller =
-        _transactionStreamControllerHandlers[transactionId] /*!*/;
+        _transactionStreamControllerHandlers[transactionId]!;
 
     try {
       dynamic result =
-          await _transactionHandlers[transactionId] /*!*/ (transaction);
+          await _transactionHandlers[transactionId]! (transaction);
 
       // Broadcast the result. This allows the [runTransaction] handler to update
       // the current result. We can't send the result to native, since in some
@@ -180,7 +162,7 @@ class MethodChannelFirebaseFirestore extends FirebaseFirestorePlatform {
   }
 
   /// Attach a [FirebaseException] to a given [StreamController].
-  void _handleError(StreamController /*?*/ controller,
+  void _handleError(StreamController? controller,
       Map<dynamic, dynamic> arguments) async {
     if (controller == null) {
       return;
@@ -220,24 +202,24 @@ class MethodChannelFirebaseFirestore extends FirebaseFirestorePlatform {
   /// A map containing all the pending Query Observers, keyed by their id.
   /// This is shared amongst all [MethodChannelQuery] objects, and the `QuerySnapshot`
   /// `MethodCall` handler initialized in the constructor of this class.
-  static final Map<int, StreamController<QuerySnapshotPlatform> /*!*/ >
-      queryObservers = <int, StreamController<QuerySnapshotPlatform> /*!*/ >{};
+  static final Map<int, StreamController<QuerySnapshotPlatform> >
+      queryObservers = <int, StreamController<QuerySnapshotPlatform> >{};
 
   /// A map containing all the pending Document Observers, keyed by their id.
   /// This is shared amongst all [MethodChannelDocumentReference] objects, and the
   /// `DocumentSnapshot` `MethodCall` handler initialized in the constructor of this class.
-  static final Map<int, StreamController<DocumentSnapshotPlatform> /*!*/ >
+  static final Map<int, StreamController<DocumentSnapshotPlatform> >
       documentObservers =
-      <int, StreamController<DocumentSnapshotPlatform> /*!*/ >{};
+      <int, StreamController<DocumentSnapshotPlatform> >{};
 
   /// A map containing all observes for the [snapshotsInSync] method.
-  static final Map<int, StreamController<void> /*!*/ > snapshotInSyncObservers =
-      <int, StreamController<void> /*!*/ >{};
+  static final Map<int, StreamController<void> > snapshotInSyncObservers =
+      <int, StreamController<void> >{};
 
   /// Stores the users [TransactionHandlers] for usage when a transaction is
   /// running.
-  static final Map<int, TransactionHandler /*!*/ > _transactionHandlers =
-      <int, TransactionHandler /*!*/ >{};
+  static final Map<int, TransactionHandler > _transactionHandlers =
+      <int, TransactionHandler >{};
 
   /// Stores a transactions [StreamController]
   static final Map<int, StreamController> _transactionStreamControllerHandlers =
@@ -250,7 +232,7 @@ class MethodChannelFirebaseFirestore extends FirebaseFirestorePlatform {
   /// Gets a [FirebaseFirestorePlatform] with specific arguments such as a different
   /// [FirebaseApp].
   @override
-  FirebaseFirestorePlatform delegateFor({/*required*/ FirebaseApp app}) {
+  FirebaseFirestorePlatform delegateFor({/*required*/ required FirebaseApp app}) {
     return MethodChannelFirebaseFirestore(app: app);
   }
 
@@ -271,7 +253,7 @@ class MethodChannelFirebaseFirestore extends FirebaseFirestorePlatform {
 
   @override
   Future<void> enablePersistence(
-      [PersistenceSettings /*?*/ persistenceSettings]) async {
+      [PersistenceSettings? persistenceSettings]) async {
     throw UnimplementedError(
         'enablePersistence() is only available for Web. Use [Settings.persistenceEnabled] for other platforms.');
   }
@@ -320,12 +302,12 @@ class MethodChannelFirebaseFirestore extends FirebaseFirestorePlatform {
   Stream<void> snapshotsInSync() {
     int handle = MethodChannelFirebaseFirestore.nextMethodChannelHandleId;
 
-    StreamController<QuerySnapshotPlatform /*!*/ >
+    StreamController<QuerySnapshotPlatform >?
         controller; // ignore: close_sinks
-    controller = StreamController<QuerySnapshotPlatform /*!*/ >.broadcast(
+    controller = StreamController<QuerySnapshotPlatform >.broadcast(
       onListen: () {
         MethodChannelFirebaseFirestore.snapshotInSyncObservers[handle] =
-            controller /*!*/;
+            controller!;
         MethodChannelFirebaseFirestore.channel.invokeMethod<int>(
           'Firestore#addSnapshotsInSyncListener',
           <String, dynamic>{
@@ -359,7 +341,7 @@ class MethodChannelFirebaseFirestore extends FirebaseFirestorePlatform {
     _transactionHandlers[transactionId] = transactionHandler;
     _transactionStreamControllerHandlers[transactionId] = streamController;
 
-    /*late*/ T result;
+    late T result;
     dynamic exception;
 
     // If the uses [TransactionHandler] throws an error, the stream broadcasts
@@ -389,7 +371,7 @@ class MethodChannelFirebaseFirestore extends FirebaseFirestorePlatform {
       if (exception is PlatformException) {
         return Future.error(platformExceptionToFirebaseException(exception));
       } else {
-        return Future.error(exception /*!*/);
+        return Future.error(exception!);
       }
     }
 
